@@ -1,5 +1,5 @@
-import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: TextField(
                           cursorColor: Colors.black,
                           keyboardType: TextInputType.multiline,
-                          textInputAction: TextInputAction.done,
+                          textInputAction: TextInputAction.search,
                           style: TextStyle(color: Colors.white30,fontSize: 20.0,fontWeight: FontWeight.w800,),
                            onSubmitted:(value){
     getHttp(value);
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: GestureDetector(
                       onTap:(){
                         showModalBottomSheet(isScrollControlled:true,context: context, builder: (BuildContext context){
-                          return DetailScreen(data: movieList['Search'][index]);
+                          return DetailScreen(movieId: movieList['Search'][index]['imdbID'],posterUrl:movieList['Search'][index]['Poster'],);
                         });
                       },
                       child: Container(
@@ -142,12 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Container(
+                              child: ClipRRect(
 
-                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  image: DecorationImage(image: NetworkImage(movieList["Search"][index]['Poster']),fit: BoxFit.cover)
-                                ),
+                                child: CachedNetworkImage(imageUrl: movieList['Search'][index]['Poster'],placeholder: (context,url)=>Icon(Icons.image),errorWidget:(context,url,error)=>Icon(Icons.error,color: Colors.white30,),),
+
                               ),
                             ),
                             Text(movieList['Search'][index]['Title'],overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white54,fontWeight: FontWeight.w800),),
@@ -159,11 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-                childCount: movieList['Search']==null?0:movieList["Search"].length,
+                childCount: movieList==null?0:movieList["Search"].length,
               ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 200/200,
+                childAspectRatio:200/250,
                 mainAxisSpacing: 25.0,
               ),
             ),

@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bk.movieapp.movieapp_project">
-   <application
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
         android:label="movieapp_project"
         android:icon="@mipmap/ic_launcher">
         <activity
